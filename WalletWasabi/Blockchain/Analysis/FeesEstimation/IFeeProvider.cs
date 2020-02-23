@@ -8,8 +8,8 @@ namespace WalletWasabi.Blockchain.Analysis.FeesEstimation
 {
 	public interface IFeeProvider
 	{
-		public event EventHandler<AllFeeEstimate> AllFeeEstimateChanged;
+		event EventHandler<AllFeeEstimate> AllFeeEstimateChanged;
 
-		public AllFeeEstimate AllFeeEstimate { get; }
+		AllFeeEstimate AllFeeEstimate { get; }
 	}
 }

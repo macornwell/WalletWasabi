@@ -4,7 +4,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>8</LangVersion>
     <NoWarn>1701;1702;1705;1591;1573;CA1031</NoWarn>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
@@ -22,6 +22,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.1" />
+	  <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
 	  <PackageReference Include="NBitcoin" Version="5.0.13" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
   </ItemGroup>
