@@ -29,43 +29,6 @@ namespace WalletWasabi.Gui.Rpc
 			Global = global;
 		}
 		
-		public KeyManager TryGetKeyManagerFromWalletName(string walletName)
-		{
-			try
-			{
-				KeyManager keyManager = null;
-				if (walletName != null)
-				{
-					var walletFullPath = Global.GetWalletFullPath(walletName);
-					var walletBackupFullPath = Global.GetWalletBackupFullPath(walletName);
-					if (!File.Exists(walletFullPath) && !File.Exists(walletBackupFullPath))
-					{
-						throw new Exception("NO wallet by that name");
-					}
-
-					try
-					{
-						keyManager = Global.LoadKeyManager(walletFullPath, walletBackupFullPath);
-					}
-					catch (Exception ex)
-					{
-						throw new Exception("Error getting wallet.", ex);
-					}
-				}
-
-				if (keyManager is null)
-				{
-					throw new Exception("Error getting wallet 2.");
-				}
-
-				return keyManager;
-			}
-			catch (Exception ex)
-			{
-				return null;
-			}
-		}
-
 		[JsonRpcMethod(("loadwallet"))]
 		public object LoadWallet(string walletName, string password)
 		{
@@ -73,15 +36,21 @@ namespace WalletWasabi.Gui.Rpc
 			var lwvm = (wm.Categories
 					.Where(x => (x as LoadWalletViewModel) != null && (x as LoadWalletViewModel).IsDesktopWallet))
 					.FirstOrDefault() as LoadWalletViewModel;
+      String setWalletName = "";
 			Dispatcher.UIThread.InvokeAsync(new Action(() =>
 			{
 				lwvm.SelectedWallet = new LoadWalletEntry(walletName);
 				lwvm.SelectedWallet.WalletName = walletName;
 				var keyManager = lwvm.LoadKeyManagerAsync(false, false).Result;
-				Task.Run(async () => await Global.InitializeWalletServiceAsync(keyManager)).Wait();
+        try {
+				  Task.Run(async () => await Global.InitializeWalletServiceAsync(keyManager)).Wait();
+          setWalletName = lwvm.SelectedWallet.WalletName;
+        } catch(Exception e) {
+          throw new Exception("Exception occurred while loading wallet. Check wallet name, and try again.", e);
+        }
 			})).Wait();
 			
-			return "IT WORKS!?";
+			return setWalletName;
 		}
 
 
